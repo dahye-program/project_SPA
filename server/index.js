@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const fs = require('fs');
+const imageToBase64 = require('image-to-base64');
 
 app.use(cors({
     origin: true,
@@ -9,7 +10,7 @@ app.use(cors({
 }))
 
 // 이미지 저장해서 불러오는 것
-app.get('/test', ((req, res)=>{
+app.get('/test', (async (req, res)=>{
     const MAX_INDEX = 50000;
     const IMAGE_INDEX = 3;
     /*
@@ -21,8 +22,9 @@ app.get('/test', ((req, res)=>{
         /*
         * 난수 생성 로직
         * */
-        const result = fs.readFileSync(`./img/${randomIndex}.png`, {encoding: 'base64'});
-        console.log(result); // img -> base64
+        const result = await imageToBase64(`./img/${randomIndex}.png`);
+        // console.log(result);
+
         /*
         * DB INSERT logic
         * */
