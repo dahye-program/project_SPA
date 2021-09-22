@@ -1,0 +1,26 @@
+{
+  "name": "project_spa",
+  "version": "1.0.0",
+  "description": "전통적인 과거의 웹 사이트는 문서 하나에 전달되는 파일의 용량이 작았음",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dahye-program/project_SPA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dahye-program/project_SPA/issues"
+  },
+  "homepage": "https://github.com/dahye-program/project_SPA#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "nodemon": "^2.0.12"
+  }
+}
