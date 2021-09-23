@@ -11,6 +11,7 @@ app.use(cors({
 
 // 이미지 저장해서 불러오는 것
 app.get('/test', (async (req, res)=>{
+    console.info("반갑다 친구! 왔구나! ");
     const MAX_INDEX = 50000;
     const IMAGE_INDEX = 3;
     /*
