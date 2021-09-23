@@ -24,6 +24,9 @@ app.get('/test', (async (req, res)=>{
         * 난수 생성 로직
         * */
         const result = await imageToBase64(`./img/${randomIndex}.png`);
+
+        console.log("나는 테스트~ ");
+        console.log("망했어~~~~");
         // console.log(result);
 
         /*
