@@ -14,7 +14,7 @@ app.use(cors({
 app.get('/test', (async (req, res) => {
         console.info("반갑다 친구! 왔구나! ");
         let connection;
-        const MAX_INDEX = 25000;
+        const MAX_INDEX = 300;
         const IMAGE_INDEX = 3;
         try {
             // DB Connection
