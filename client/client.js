@@ -6,24 +6,11 @@ class Main{
     }
 
     testEvent(){
-        this.#dom.querySelector('.click').addEventListener('click',  async ()=>{
+        this.#dom.querySelector('.INSERT').addEventListener('click',  async ()=>{
              //console.log('click');
             const response = await fetch('http://localhost:3000/test');
         })
     }
-
-    // testEvent(){
-    //     this.#dom.querySelector('.click').addEventListener('click',  async ()=>{
-    //         //console.log('click');
-    //         const response = await fetch('http://localhost:3000',{
-    //             mode: 'cors',
-    //             credentials: 'include',
-    //             method: 'GET',
-    //             body: 1
-    //         })
-    //     })
-    // }
-
 }
 
 // 어떤 버튼을 누르면 (프론트)
