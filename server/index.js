@@ -14,11 +14,11 @@ app.use(cors({
 app.get('/test', (async (req, res) => {
         console.info("반갑다 친구! 왔구나! ");
         let connection;
-        const MAX_INDEX = 50000;
+        const MAX_INDEX = 25000;
         const IMAGE_INDEX = 3;
         try {
             // DB Connection
-            connection= mysql.createConnection({
+            connection = mysql.createConnection({
                 host: "aws-testdb.cuvxnrywexkb.ap-northeast-2.rds.amazonaws.com",
                 port: 3306,
                 user: "dahye",
@@ -32,24 +32,26 @@ app.get('/test', (async (req, res) => {
 
         connection.connect();
         try {
+            // DB 기존 데이터 싹 날리는 로직
             const result = await connection.query(`
-                INSERT INTO test (id, name)
-                VALUES (1, 'qwe');
+                TRUNCATE TABLE img64
             `)
         } catch {
-            throw new Error("INSERT 실패");
+            throw new Error("기존 데이터를 못지웠어요..");
         }
-        // DB 기존 데이터 싹 날리는 로직
-        // TRUNCATE TABLE img64 : img64 테이블 안의 데이터 모두 삭제
 
-        // for (let i = 0; i < MAX_INDEX; i++) {
-        //     // 1부터 3사이의 난수 생성 로직
-        //     let randomIndex = Math.floor(Math.random()*3)+1;
-        //
-        //     // 서버의 이미지 Base64 형식으로 불러오기
-        //     const result = imageToBase64(`./img/${randomIndex}.png`);
-        //
-        // }
+        for (let i = 0; i < MAX_INDEX; i++) {
+            // 1부터 3사이의 난수 생성 로직
+            let randomIndex = Math.floor(Math.random()*3)+1;
+
+            // 서버의 이미지 Base64 형식으로 불러오기
+            const result = await imageToBase64(`./img/${randomIndex}.png`);
+            await connection.query(`
+                INSERT INTO img64(img) 
+                VALUES(${connection.escape(result)})
+            `)
+        }
+        console.info("삽입 성공");
         res.send("어서오세요");
     })
 )
