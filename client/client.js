@@ -2,15 +2,28 @@ class Main{
     #dom
     constructor(dom) {
         this.#dom = dom;
-        this.testEvent();
+        this.insertEvent();
+        this.selectEvent();
     }
 
-    testEvent(){
+    insertEvent(){
         this.#dom.querySelector('.INSERT').addEventListener('click',  async ()=>{
-             //console.log('click');
+             //console.log('insert click');
             const response = await fetch('http://localhost:3000/test');
         })
     }
+
+    selectEvent(){
+        this.#dom.querySelector('.SELECT').addEventListener('click',  async ()=>{
+            //console.log('select click');
+            const response = await fetch('http://localhost:3000/img');
+            if (response.status === 200) {
+                const result = JSON.parse(await response.text());
+
+            }
+        })
+    }
+
 }
 
 // 어떤 버튼을 누르면 (프론트)
