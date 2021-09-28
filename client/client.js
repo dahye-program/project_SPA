@@ -1,34 +1,57 @@
-class Main{
+class Main {
     #dom
+    #table
+    #tableData
+    #childData
+
     constructor(dom) {
         this.#dom = dom;
-        this.insertEvent();
-        this.selectEvent();
+        this.#table = dom.querySelector(".table");
+        this.#insertEvent();
+        this.#selectListener();
     }
 
-    insertEvent(){
-        this.#dom.querySelector('.INSERT').addEventListener('click',  async ()=>{
-             //console.log('insert click');
-            const response = await fetch('http://localhost:3000/test');
+    #prepareDom() {
+        // document => 연결된 문서 전역으로 접근 가능
+        const t_img = document.querySelector('.template-image');
+        const td_img = document.querySelector('.template-data');
+        // t_img의 content 활성화
+        const template = document.importNode(t_img.content, true);
+        const template_ = document.importNode(td_img.content, true);
+
+        this.#tableData = template.querySelector('.table-row');
+        this.#childData = template_.querySelector('.img-data');
+        this.#table.appendChild(template);
+    }
+
+    #insertEvent() { // 이미지 DB에 INSERT
+        this.#dom.querySelector('.INSERT').addEventListener('click', async () => {
+            await fetch('http://localhost:3000/test');
         })
     }
 
-    selectEvent(){
-        this.#dom.querySelector('.SELECT').addEventListener('click',  async ()=>{
-            //console.log('select click');
-            const response = await fetch('http://localhost:3000/img');
-            if (response.status === 200) {
-                const result = JSON.parse(await response.text());
+    #selectListener() { // 서버에서 이미지 받아와서 출력
+        this.#dom.querySelector('.SELECT').addEventListener('click', async () => {
+            await this.#selectEvent();
+        })
+    }
 
+    async #selectEvent() {
+        let result;
+        const response = await fetch('http://localhost:3000/img');
+        if (response.status === 200) {
+            result = JSON.parse(await response.text());
+            for (let i = 0; i < result.length/5; i++) {
+                this.#prepareDom();
+                const imageDom = this.#childData.querySelector('.Image');
+                this.insertRowIndex(imageDom ,result[i].img);
+                this.#tableData.appendChild(this.#childData)
             }
-        })
+        }
     }
 
+    insertRowIndex(imgDom, data) {
+        const dataFilter = 'data:image/png;base64, ';
+        imgDom.setAttribute('src', dataFilter.concat(data))
+    }
 }
-
-// 어떤 버튼을 누르면 (프론트)
-// 서버에 특정 경로로 요청이 가고
-// 그러면 서버에 저장되어 있는 이미지를 불러와서
-// 이미지를 base64 로 변환 한 후에
-// RDS혹은 MySQL에다가 그 값을 넣는다~
-// 이걸 For문으로 졸라반복

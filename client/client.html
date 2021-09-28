@@ -11,15 +11,20 @@
         <p class = "title">버튼을 눌러보세요</p>
         <button class ="INSERT">이미지 삽입</button>
         <button class ="SELECT">이미지를 출력해볼꽈</button>
-        <table>
-            <tr>
-                <th></th>
-            </tr>
-        </table>
+        <table class="table"></table>
     </section>
+    <template class="template-image">
+        <tr class="table-row">
+        </tr>
+    </template>
+
+    <template class="template-data">
+        <td class="img-data">
+            <img src="" alt="HTML5" class="Image">
+        </td>
+    </template>
 <script>
   const main = new Main(document.querySelector('.main'))
 </script>
 </body>
 </html>
-
