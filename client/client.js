@@ -3,28 +3,29 @@ class Main {
     #table
     #tableData
     #childData
-
+    #templateFlag
     constructor(dom) {
         this.#dom = dom;
         this.#table = dom.querySelector(".table");
-        this.#insertEvent();
+        this.#insertListener();
         this.#selectListener();
+        this.#prepareTableRowDom();
     }
 
-    #prepareDom() {
-        // document => 연결된 문서 전역으로 접근 가능
-        const t_img = document.querySelector('.template-image');
+    #prepareTableDataDom() {
         const td_img = document.querySelector('.template-data');
-        // t_img의 content 활성화
-        const template = document.importNode(t_img.content, true);
         const template_ = document.importNode(td_img.content, true);
-
-        this.#tableData = template.querySelector('.table-row');
         this.#childData = template_.querySelector('.img-data');
+    }
+
+    #prepareTableRowDom(){ // 5개씩 출력 위함
+        const t_img = document.querySelector('.template-image');
+        const template = document.importNode(t_img.content, true);
+        this.#tableData = template.querySelector('.table-row');
         this.#table.appendChild(template);
     }
 
-    #insertEvent() { // 이미지 DB에 INSERT
+    #insertListener() { // 이미지 DB에 INSERT
         this.#dom.querySelector('.INSERT').addEventListener('click', async () => {
             await fetch('http://localhost:3000/test');
         })
@@ -37,21 +38,25 @@ class Main {
     }
 
     async #selectEvent() {
-        let result;
         const response = await fetch('http://localhost:3000/img');
         if (response.status === 200) {
-            result = JSON.parse(await response.text());
-            for (let i = 0; i < result.length/5; i++) {
-                this.#prepareDom();
-                const imageDom = this.#childData.querySelector('.Image');
-                this.insertRowIndex(imageDom ,result[i].img);
-                this.#tableData.appendChild(this.#childData)
+            const result = JSON.parse(await response.text());
+            let imageData = result.shift();
+            const loopCount = result.length % 5 === 0 ? result.length / 5 : result.length / 5 + 1;
+            for (let i = 0; i <= Math.floor(loopCount); i++) {
+                for(let j=0; j< 5 ; j++){
+                    this.#prepareTableDataDom();
+                    const imageDom = this.#childData.querySelector('.Image');
+                    this.insertImage(imageDom ,imageData.img);
+                    this.#tableData.appendChild(this.#childData);
+                    imageData = result.shift();
+                }
+                this.#prepareTableRowDom();
             }
         }
     }
 
-    insertRowIndex(imgDom, data) {
-        const dataFilter = 'data:image/png;base64, ';
-        imgDom.setAttribute('src', dataFilter.concat(data))
+    insertImage(imgDom, data) {
+        imgDom.setAttribute('src', 'data:image/png;base64, '.concat(data))
     }
 }
