@@ -49,6 +49,7 @@ class Main {
                     const imageDom = this.#childData.querySelector('.Image');
                     this.insertImage(imageDom ,imageData.img);
                     this.#tableData.appendChild(this.#childData);
+                    if(imageData === undefined) break;
                     imageData = result.shift();
                 }
                 this.#prepareTableRowDom();
