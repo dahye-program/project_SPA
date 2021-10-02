@@ -4,11 +4,9 @@ window.addEventListener("load", () => {
 
 class Test {
     boxElement = [];
-    prevRatio
 
     constructor() {
         this.boxElement = document.querySelectorAll('.image');
-        this.prevRatio = 0.0;
         this.createObserver();
     }
 
@@ -25,6 +23,7 @@ class Test {
 
     handleIntersect(entries, observer) {
         entries.forEach((entry) => {
+
             if(entry.isIntersecting){
                 let randomIndex = Math.floor(Math.random() * 5) + 1;
                 entry.target.setAttribute('src', `./img/${randomIndex}.jpg`.concat());

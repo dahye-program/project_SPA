@@ -1,15 +1,23 @@
+window.addEventListener("load", () => {
+    //const test = new Main();
+});
+
 class Main {
     #dom
     #table
     #tableData
     #childData
-    #templateFlag
+
+    boxElement = [];
+
     constructor(dom) {
         this.#dom = dom;
         this.#table = dom.querySelector(".table");
         this.#insertListener();
         this.#selectListener();
         this.#prepareTableRowDom();
+
+        this.boxElement = document.querySelectorAll('.table-row');
     }
 
     #prepareTableDataDom() {
@@ -18,7 +26,7 @@ class Main {
         this.#childData = template_.querySelector('.img-data');
     }
 
-    #prepareTableRowDom(){ // 5개씩 출력 위함
+    #prepareTableRowDom() { // 5개씩 출력 위함
         const t_img = document.querySelector('.template-image');
         const template = document.importNode(t_img.content, true);
         this.#tableData = template.querySelector('.table-row');
@@ -37,23 +45,46 @@ class Main {
         })
     }
 
+    createObserver(result) {
+        let observer;
+        let options = {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.8
+        };
+        observer = new IntersectionObserver(this.handleIntersect, options);
+        this.boxElement.forEach(image => observer.observe(image));
+    }
+
+    handleIntersect(entries, observer) {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                return true;
+                // let randomIndex = Math.floor(Math.random() * 5) + 1;
+                // entry.target.setAttribute('src', `./img/${randomIndex}.jpg`.concat());
+            }
+        });
+    }
+
     async #selectEvent() {
         const response = await fetch('http://localhost:3000/img');
         if (response.status === 200) {
+            // if(await this.createObserver() === true)
             const result = JSON.parse(await response.text());
+            this.createObserver(result);
             let imageData = result.shift();
             const loopCount = result.length % 5 === 0 ? result.length / 5 : result.length / 5 + 1;
             for (let i = 0; i <= Math.floor(loopCount); i++) {
-                for(let j=0; j< 5 ; j++){
+                for (let j = 0; j < 5; j++) {
                     this.#prepareTableDataDom();
                     const imageDom = this.#childData.querySelector('.Image');
-                    this.insertImage(imageDom ,imageData.img);
+                    this.insertImage(imageDom, imageData.img);
                     this.#tableData.appendChild(this.#childData);
-                    if(imageData === undefined) break;
                     imageData = result.shift();
                 }
                 this.#prepareTableRowDom();
             }
+
         }
     }
 
@@ -61,3 +92,4 @@ class Main {
         imgDom.setAttribute('src', 'data:image/png;base64, '.concat(data))
     }
 }
+

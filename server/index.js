@@ -62,7 +62,7 @@ app.get('/img', (async (req, res) => {
         const result = await connection.query(`
             SELECT img
             FROM img64
-            WHERE id <= 3000`, (err, result, fields) => {
+            WHERE id <= 20`, (err, result, fields) => {
                 res.send(JSON.stringify(result));
         });
     })
