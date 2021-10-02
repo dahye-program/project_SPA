@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lazyloading</title>
+    <link href="test1.css" rel="stylesheet">
+    <script src="test1.js"></script>
+</head>
+<body>
+<section class="image-container">
+    <img class="image" src="./img/1.jpg" alt="img" width="500px" height="500px"/>
+    <img class="image" src="./img/2.jpg" alt="img"/>
+    <img class="image" data-lazy="./img/3.jpg" alt="img"/>
+    <img class="image" data-lazy="./img/4.jpg" alt="img"/>
+    <img class="image" data-lazy="./img/5.jpg" alt="img"/>
+</section>
+<script>
+    const main = new Main(document.querySelector('.image-container'))
+</script>
+</body>
+</html>
