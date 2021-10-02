@@ -46,6 +46,7 @@ app.get('/test', (async (req, res) => {
 
 app.get('/img', (async (req, res) => {
         let connection;
+        console.info("요청!");
         try {
             // DB Connection
             connection = mysql.createConnection({
@@ -62,7 +63,7 @@ app.get('/img', (async (req, res) => {
         const result = await connection.query(`
             SELECT img
             FROM img64
-            WHERE id <= 3000`, (err, result, fields) => {
+            WHERE id <= 10`, (err, result, fields) => {
                 res.send(JSON.stringify(result));
         });
     })
