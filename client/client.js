@@ -2,6 +2,8 @@ window.addEventListener("load", () => {
     //const test = new Main();
 });
 
+let result;
+
 class Main {
     #dom
     #table
@@ -45,7 +47,7 @@ class Main {
         })
     }
 
-    createObserver(result) {
+    createObserver() {
         let observer;
         let options = {
             root: null,
@@ -59,9 +61,19 @@ class Main {
     handleIntersect(entries, observer) {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                return true;
-                // let randomIndex = Math.floor(Math.random() * 5) + 1;
-                // entry.target.setAttribute('src', `./img/${randomIndex}.jpg`.concat());
+                let imageData = result.shift();
+                const loopCount = result.length % 5 === 0 ? result.length / 5 : result.length / 5 + 1;
+                for (let i = 0; i <= Math.floor(loopCount); i++) {
+                    for (let j = 0; j < 5; j++) {
+                        this.#prepareTableDataDom();
+                        const imageDom = this.#childData.querySelector('.Image');
+                        entry.target.setAttribute('src', 'data:image/png;base64, '.concat(imageData.img));
+                        //this.insertImage(imageDom, imageData.img);
+                        this.#tableData.appendChild(this.#childData);
+                        imageData = result.shift();
+                    }
+                    this.#prepareTableRowDom();
+                }
             }
         });
     }
@@ -69,27 +81,9 @@ class Main {
     async #selectEvent() {
         const response = await fetch('http://localhost:3000/img');
         if (response.status === 200) {
-            // if(await this.createObserver() === true)
-            const result = JSON.parse(await response.text());
-            this.createObserver(result);
-            let imageData = result.shift();
-            const loopCount = result.length % 5 === 0 ? result.length / 5 : result.length / 5 + 1;
-            for (let i = 0; i <= Math.floor(loopCount); i++) {
-                for (let j = 0; j < 5; j++) {
-                    this.#prepareTableDataDom();
-                    const imageDom = this.#childData.querySelector('.Image');
-                    this.insertImage(imageDom, imageData.img);
-                    this.#tableData.appendChild(this.#childData);
-                    imageData = result.shift();
-                }
-                this.#prepareTableRowDom();
-            }
-
+            result = JSON.parse(await response.text());
+            this.createObserver();
         }
-    }
-
-    insertImage(imgDom, data) {
-        imgDom.setAttribute('src', 'data:image/png;base64, '.concat(data))
     }
 }
 
